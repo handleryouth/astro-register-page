@@ -1,0 +1,24 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+interface Props {
+  legend: string;
+  inputProps: Omit<HTMLAttributes<"input">, "type">;
+  hint?: string;
+}
+const {
+  legend,
+  inputProps: { class: className, ...restInputProps },
+  hint,
+} = Astro.props;
+---
+
+<fieldset class="daisy-fieldset">
+  <legend class="daisy-fieldset-legend">{legend}</legend>
+  <input
+    type="file"
+    class=`daisy-file-input ${className}`
+    {...restInputProps}
+  />
+  <label class="daisy-label">{hint}</label>
+</fieldset>

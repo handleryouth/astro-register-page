@@ -1,0 +1,10 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@plugin "daisyui" {
+  prefix: "daisy-";
+  themes: light --default, dark --prefersdark, night;
+}
+
+@theme {
+  --font-display: "Inter", sans-serif;
+}

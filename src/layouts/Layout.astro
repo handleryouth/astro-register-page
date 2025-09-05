@@ -1,0 +1,32 @@
+---
+import { Image } from "astro:assets";
+import logoMark from "../assets/logo-mark.svg";
+import "@fontsource-variable/inter";
+import { ClientRouter } from "astro:transitions";
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <ClientRouter />
+  </head>
+  <body
+    class=`!font-display min-h-screen relative bg-cover md:bg-[url(../assets/background-tablet.png)] lg:bg-[url(../assets/background-desktop.png)] bg-[url(../assets/background-mobile.png)]`
+  >
+    <div class="flex items-center gap-x-2 justify-center p-4">
+      <Image src={logoMark} width={35} height={35} alt="Conference Icon" />
+      <h1 class="text-4xl font-bold">Coding Conf</h1>
+    </div>
+    <slot />
+  </body>
+</html>

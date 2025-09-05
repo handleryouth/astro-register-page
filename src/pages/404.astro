@@ -1,0 +1,31 @@
+---
+import Layout from "../layouts/Layout.astro";
+import "../styles/notFound.css";
+---
+
+<Layout title="Page Not Found">
+  <div
+    class="min-h-screen flex justify-center flex-col items-center"
+    transition:animate="slide"
+  >
+    <div class="face">
+      <div class="band">
+        <div class="red"></div>
+        <div class="white"></div>
+        <div class="blue"></div>
+      </div>
+      <div class="eyes"></div>
+      <div class="dimples"></div>
+      <div class="mouth"></div>
+    </div>
+
+    <div class="text-center prose mx-auto my-2">
+      <h1 class="prose-2xl font-bold text-white">
+        Oops! Something went wrong!
+      </h1>
+      <a href="/register" role="button" class="daisy-btn daisy-btn-primary"
+        >Return to register</a
+      >
+    </div>
+  </div>
+</Layout>

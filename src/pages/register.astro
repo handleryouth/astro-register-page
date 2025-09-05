@@ -1,0 +1,92 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Input from "../components/Input.astro";
+import FileInput from "../components/FileInput.astro";
+---
+
+<Layout title="Register Form">
+  <div class="mx-auto w-1/4">
+    <div class="prose mx-auto my-4">
+      <h3 class="text-4xl/relaxed text-white font-bold text-center">
+        Your Journey to Coding Conf 2025 Starts Here!
+      </h3>
+      <p class="text-center text-white">
+        Secure your spot at next year's biggest coding conference.
+      </p>
+    </div>
+
+    <form id="registerForm" class="my-4 flex flex-col gap-y-3">
+      <FileInput
+        legend="Upload Avatar"
+        inputProps={{
+          class: "w-full",
+        }}
+        hint="Upload your photo (JPG or PNG, max size: 500KB)"
+      />
+
+      <Input
+        label="Full Name"
+        inputProps={{
+          placeholder: "Full Name",
+          class: "w-full",
+        }}
+      />
+
+      <Input
+        label="Email Address"
+        inputProps={{
+          placeholder: "Email Address",
+          class: "w-full",
+        }}
+      />
+
+      <Input
+        label="Github Username"
+        inputProps={{
+          placeholder: "@yourusename",
+          class: "w-full",
+        }}
+      />
+
+      <p class="text-center" id="validationResult"></p>
+
+      <button class="daisy-btn w-full">Register</button>
+    </form>
+  </div>
+
+  <script>
+    import { z } from "astro:schema";
+
+    const registerSchema = z.object({
+      fullName: z.string({ message: "Full name must be filled" }),
+      email: z
+        .string({ message: "Email must be filled" })
+        .email({ message: "Input must be in email format" }),
+      githubUsername: z.string({ message: "Github username must be filled" }),
+    });
+
+    document
+      .getElementById("registerForm")
+      .addEventListener("submit", (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const data = Object.fromEntries(formData.entries());
+
+        try {
+          registerSchema.parse(data);
+        } catch (error) {
+          if (error instanceof z.ZodError) {
+            console.log("error", error);
+            const errors = error.errors[0];
+            document.getElementById("validationResult").textContent =
+              `Input not valid: ${errors.message}`;
+            document.getElementById("validationResult").style.color = "red";
+          } else {
+            document.getElementById("validationResult").textContent =
+              "An unexpected error occurred.";
+            document.getElementById("validationResult").style.color = "red";
+          }
+        }
+      });
+  </script>
+</Layout>
