@@ -29,6 +29,7 @@ import FileInput from "../components/FileInput.astro";
         inputProps={{
           placeholder: "Full Name",
           class: "w-full",
+          name: "fullName",
         }}
       />
 
@@ -37,6 +38,7 @@ import FileInput from "../components/FileInput.astro";
         inputProps={{
           placeholder: "Email Address",
           class: "w-full",
+          name: "email",
         }}
       />
 
@@ -45,12 +47,13 @@ import FileInput from "../components/FileInput.astro";
         inputProps={{
           placeholder: "@yourusename",
           class: "w-full",
+          name: "githubUsername",
         }}
       />
 
       <p class="text-center" id="validationResult"></p>
 
-      <button class="daisy-btn w-full">Register</button>
+      <button id="formButton" class="daisy-btn w-full"> Register</button>
     </form>
   </div>
 
@@ -58,25 +61,55 @@ import FileInput from "../components/FileInput.astro";
     import { z } from "astro:schema";
 
     const registerSchema = z.object({
-      fullName: z.string({ message: "Full name must be filled" }),
+      fullName: z.string({ message: "Full name must be filled" }).min(1, {
+        message: "Full name must be filled",
+      }),
       email: z
         .string({ message: "Email must be filled" })
         .email({ message: "Input must be in email format" }),
-      githubUsername: z.string({ message: "Github username must be filled" }),
+      githubUsername: z
+        .string({ message: "Github username must be filled" })
+        .min(1, {
+          message: "Github username must be filled",
+        }),
     });
+
+    const sendData = async (inputData: z.infer<typeof registerSchema>) => {
+      const response = await fetch("/api/register", {
+        body: JSON.stringify({
+          ...inputData,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+      })
+        .then((res) => res.json())
+        .catch((err) => {
+          console.log("err", err);
+        });
+
+      return response;
+    };
 
     document
       .getElementById("registerForm")
-      .addEventListener("submit", (event) => {
+      .addEventListener("submit", async (event) => {
+        document.getElementById("formButton").innerHTML =
+          '<span id="formButtonLoading" class="loading loading-spinner"></span>';
         event.preventDefault();
         const formData = new FormData(event.target);
         const data = Object.fromEntries(formData.entries());
 
         try {
-          registerSchema.parse(data);
+          const formData = registerSchema.parse(data);
+          const sendDataResponse = await sendData(formData);
+          if (sendDataResponse.status === 200) {
+            window.location.href = "/ticket";
+          }
         } catch (error) {
+          console.log("error", error);
           if (error instanceof z.ZodError) {
-            console.log("error", error);
             const errors = error.errors[0];
             document.getElementById("validationResult").textContent =
               `Input not valid: ${errors.message}`;
@@ -86,6 +119,8 @@ import FileInput from "../components/FileInput.astro";
               "An unexpected error occurred.";
             document.getElementById("validationResult").style.color = "red";
           }
+        } finally {
+          document.getElementById("formButton").innerHTML = "Register";
         }
       });
   </script>

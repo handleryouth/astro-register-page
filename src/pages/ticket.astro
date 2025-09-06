@@ -1,7 +1,68 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { Image } from "astro:assets";
+import logoMark from "../assets/logo-mark.svg";
+import avatarImage from "../assets/image-avatar.jpg";
+import githubIcon from "../assets/icon-github.svg";
+
+const todayDate = new Date().toDateString();
 ---
 
 <Layout title="Your Ticket Ready!">
-  <h1>Ticket here</h1>
+  <div class="mx-auto w-1/4">
+    <div class="prose mx-auto my-4">
+      <h3 class="text-4xl/relaxed text-white font-bold text-center">
+        Congrats, Jonatan Kristof! Your ticket is ready.
+      </h3>
+      <p class="text-center text-white">
+        We've emailed your ticket to <span class="font-bold"
+          >jonatan@email.com</span
+        > and will send updates in the run up to the event.
+      </p>
+    </div>
+
+    <div
+      class="bg-[url(../assets/pattern-ticket.svg)] flex flex-col justify-between bg-cover h-[14rem] p-4"
+    >
+      <div class="flex gap-x-2">
+        <Image src={logoMark} width={35} height={35} alt="Conference Icon" />
+        <div class="flex flex-col">
+          <h3 class="text-xl font-bold">Coding Conf</h3>
+          <p class="text-sm text-gray-500">{todayDate} / Austin, TX</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-x-2">
+        <Image
+          class="rounded-full"
+          src={avatarImage}
+          width={40}
+          height={40}
+          alt="User Avatar"
+        />
+        <div class="prose">
+          <h4 class="my-0 text-white">Jonathan Christoff</h4>
+          <a href="#" class="my-0 flex items-center text-white">
+            <Image
+              class="not-prose"
+              src={githubIcon}
+              width={20}
+              height={20}
+              alt="Github"
+            />
+
+            <span>Jonathan</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <a
+      role="button"
+      href="register"
+      class="daisy-btn daisy-btn-primary w-full my-4"
+    >
+      Back to register
+    </a>
+  </div>
 </Layout>
